@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>QuadriPlus.Extensions.Logging.File</AssemblyName>
+    <RootNamespace>QuadriPlus.Extensions.Logging.File</RootNamespace>
+    <Authors>Luc Chante</Authors>
+    <Company>QuadriPlus</Company>
+    <Product>OpenNet Library</Product>
+    <Description>OpenNet Library is an opensource library under CeCILL Licence</Description>
+    <Copyright>Copyright © 2018 All rights reserved</Copyright>
+    <PackageLicenseUrl>http://www.cecill.info/</PackageLicenseUrl>
+    <AssemblyVersion>0.1.1.1</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Extensions.Options.ConfigurationExtensions">
+      <HintPath>..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.options.configurationextensions\2.0.2\lib\netstandard2.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
