@@ -18,7 +18,7 @@ namespace QuadriPlus.Extensions.Logging.File
         [ThreadStatic]
         private static StringBuilder _logBuilder;
 
-        internal FileLogger(string name, string prefix, Func<string, LogLevel, bool> filter, IExternalScopeProvider scopeProvider, FileLoggerProcessor loggerProcessor)
+        public FileLogger(string name, string prefix, Func<string, LogLevel, bool> filter, IExternalScopeProvider scopeProvider, FileLoggerProcessor loggerProcessor)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Prefix = prefix;
@@ -44,7 +44,7 @@ namespace QuadriPlus.Extensions.Logging.File
         internal string Prefix
         {
             get => _prefix;
-            set => _prefix = CompilePrefix(value);
+            set => _prefix = CompilePrefix(value ?? throw new ArgumentNullException(nameof(value)));
         }
 
         internal IExternalScopeProvider ScopeProvider { get; set; }

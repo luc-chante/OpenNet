@@ -82,6 +82,7 @@ namespace QuadriPlus.Extensions.Logging.File
             {
                 logger.ScopeProvider = scopeProvider;
                 logger.FileProcessor = fileLogger;
+                logger.Prefix = _prefix;
             }
         }
 

@@ -10,7 +10,12 @@ OpenNet is an open source library, which intents to provide ready to use common 
 
 Download source code, and compile it with VS 2017. It will generate nuget package.
 
+## Features
+
+ - File logging: ILogger implementation to store logs into file
+
 ##Licensing
 
 The code in this project is licensed under CeCILL license.
 **see: [CeCILL](http://www.cecill.info/)**
+
