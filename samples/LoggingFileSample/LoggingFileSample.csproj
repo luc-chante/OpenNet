@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyVersion>1.0.3.3</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Logging.File\Logging.File.csproj" />
+    <ProjectReference Include="..\..\src\Logging.File\Logging.File.csproj" />
   </ItemGroup>
 
 </Project>

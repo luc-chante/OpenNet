@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{1587
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FD0A82C8-A444-4927-A667-5B520226DE70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggingFileSample", "samples\LoggingFileSample\LoggingFileSample.csproj", "{5F137A15-D7A4-4331-8B5B-1EC07781A398}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggingFileSample", "samples\LoggingFileSample\LoggingFileSample.csproj", "{5F137A15-D7A4-4331-8B5B-1EC07781A398}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,7 +42,8 @@ Global
 		UpdateAssemblyVersion = True
 		UpdateAssemblyFileVersion = False
 		UpdateAssemblyInfoVersion = False
-		AssemblyVersionSettings = None.IncrementOnDemand.IncrementWithResetOnIncrease.Increment
+		ShouldCreateLogs = True
+		AssemblyVersionSettings = IncrementOnDemand.IncrementOnDemand.IncrementWithResetOnIncrease.Increment
 		UpdatePackageVersion = False
 		AssemblyInfoVersionType = SettingsVersion
 		InheritWinAppVersionFrom = None
