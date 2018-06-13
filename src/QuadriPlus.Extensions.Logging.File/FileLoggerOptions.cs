@@ -8,7 +8,7 @@ namespace QuadriPlus.Extensions.Logging.File
 
         public string Path { get; set; }
 
-        public string Prefix { get; set; } = "%date [%lvl] %name - ";
+        public string Pattern { get; set; } = "%date [%lvl] %name - %message";
 
         public FileLoggerBehaviour Behaviour { get; set; } = FileLoggerBehaviour.Append;
 

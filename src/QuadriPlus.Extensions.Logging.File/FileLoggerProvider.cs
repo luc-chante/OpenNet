@@ -71,7 +71,7 @@ namespace QuadriPlus.Extensions.Logging.File
 
             _includeScopes = options.IncludeScopes;
             _path = ResolvePath(options.Path);
-            _prefix = options.Prefix;
+            _prefix = options.Pattern;
             _behaviour = options.Behaviour;
             _backupMode = options.BackupMode;
             _maxAge = options.MaxAge;
@@ -82,7 +82,7 @@ namespace QuadriPlus.Extensions.Logging.File
             {
                 logger.ScopeProvider = scopeProvider;
                 logger.FileProcessor = fileLogger;
-                logger.Prefix = _prefix;
+                logger.Pattern = _prefix;
             }
         }
 

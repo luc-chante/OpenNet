@@ -9,19 +9,19 @@ namespace QuadriPlus.Extensions.Logging.File
 {
     public class FileLogger : ILogger
     {
-        private static readonly Regex PrefixRegex = new Regex(@"%(-?\d)?(date|level|name|lvl)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex PrefixRegex = new Regex(@"%(-?\d)?(date|level|lvl|name|message)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private FileLoggerProcessor _fileProcessor;
         private Func<string, LogLevel, bool> _filter;
-        private string _prefix;
+        private string _pattern;
 
         [ThreadStatic]
         private static StringBuilder _logBuilder;
 
-        public FileLogger(string name, string prefix, Func<string, LogLevel, bool> filter, IExternalScopeProvider scopeProvider, FileLoggerProcessor loggerProcessor)
+        public FileLogger(string name, string pattern, Func<string, LogLevel, bool> filter, IExternalScopeProvider scopeProvider, FileLoggerProcessor loggerProcessor)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Prefix = prefix;
+            Pattern = pattern;
             Filter = filter ?? ((category, logLevel) => true);
             ScopeProvider = scopeProvider;
             FileProcessor = loggerProcessor;
@@ -41,10 +41,10 @@ namespace QuadriPlus.Extensions.Logging.File
 
         public string Name { get; }
 
-        internal string Prefix
+        internal string Pattern
         {
-            get => _prefix;
-            set => _prefix = CompilePrefix(value ?? throw new ArgumentNullException(nameof(value)));
+            get => _pattern;
+            set => _pattern = CompilePattern(value ?? throw new ArgumentNullException(nameof(value)));
         }
 
         internal IExternalScopeProvider ScopeProvider { get; set; }
@@ -86,21 +86,18 @@ namespace QuadriPlus.Extensions.Logging.File
                 logBuilder = new StringBuilder();
             }
 
-            var levelString = logLevel.ToString();
-            var lvlString = GetLogLevelString(logLevel);
-            var prefix = string.Format(Prefix, DateTime.Now, levelString, levelString.ToLower(), lvlString, lvlString.ToLower(), Name);
-
             // scope information
             GetScopeInformation(logBuilder);
 
             if (!string.IsNullOrEmpty(message))
             {
-                logBuilder.Append(prefix).AppendLine(message);
+                logBuilder.AppendLine(FormatMessage(DateTime.Now, logLevel, message));
             }
-            
-            if (exception != null)
+
+            for (var ex = exception; ex != null; ex = ex.InnerException)
             {
-                AppendException(logBuilder, prefix, exception);
+                logBuilder.AppendLine(FormatMessage(DateTime.Now, logLevel, ex));
+                logBuilder.AppendLine(ex.StackTrace);
             }
 
             // Queue log message
@@ -114,18 +111,35 @@ namespace QuadriPlus.Extensions.Logging.File
             _logBuilder = logBuilder;
         }
 
-        public void AppendException(StringBuilder logBuilder, string prefix, Exception exception)
+        private void GetScopeInformation(StringBuilder stringBuilder)
         {
-            logBuilder.Append(prefix).AppendLine($"{exception.GetType().FullName}: {exception.Message}");
-            logBuilder.AppendLine(exception.StackTrace);
-
-            if (exception.InnerException != null)
+            var scopeProvider = ScopeProvider;
+            if (scopeProvider != null)
             {
-                AppendException(logBuilder, prefix,exception.InnerException);
+                var initialLength = stringBuilder.Length;
+
+                scopeProvider.ForEachScope((scope, state) =>
+                {
+                    var (builder, length) = state;
+                    var first = length == builder.Length;
+                    builder.Append(first ? "=> " : " => ").Append(scope);
+                }, (stringBuilder, initialLength));
             }
         }
 
-        private string CompilePrefix(string pattern)
+        private string FormatMessage(DateTime date, LogLevel logLevel, string message)
+        {
+            var levelString = logLevel.ToString();
+            var lvlString = GetLogLevelString(logLevel);
+            var log = string.Format(Pattern, date, levelString, levelString.ToLower(), lvlString, lvlString.ToLower(), Name, message);
+
+            return log;
+        }
+
+        private string FormatMessage(DateTime date, LogLevel logLevel, Exception exception) =>
+            FormatMessage(date, logLevel, $"{exception.GetType().FullName}: {exception.Message}");
+
+        private static string CompilePattern(string pattern)
         {
             int cursor = 0;
             StringBuilder sb = new StringBuilder(pattern.Length);
@@ -152,6 +166,9 @@ namespace QuadriPlus.Extensions.Logging.File
                         break;
                     case "name":
                         sb.Append("{5");
+                        break;
+                    case "message":
+                        sb.Append("{6");
                         break;
                 }
                 if (match.Groups[1].Captures.Count != 0)
@@ -185,22 +202,6 @@ namespace QuadriPlus.Extensions.Logging.File
                     return "Crit";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(logLevel));
-            }
-        }
-
-        private void GetScopeInformation(StringBuilder stringBuilder)
-        {
-            var scopeProvider = ScopeProvider;
-            if (scopeProvider != null)
-            {
-                var initialLength = stringBuilder.Length;
-
-                scopeProvider.ForEachScope((scope, state) =>
-                {
-                    var (builder, length) = state;
-                    var first = length == builder.Length;
-                    builder.Append(first ? "=> " : " => ").Append(scope);
-                }, (stringBuilder, initialLength));
             }
         }
     }

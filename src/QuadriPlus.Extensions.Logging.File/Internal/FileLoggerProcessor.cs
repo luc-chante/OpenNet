@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,11 +15,20 @@ namespace QuadriPlus.Extensions.Logging.File.Internal
 
         private readonly BlockingCollection<string> _messageQueue = new BlockingCollection<string>(_maxQueuedMessages);
         private readonly Thread _outputThread;
+        private Encoding _streamEncoding;
         private StreamWriter _stream;
 
         public FileLoggerProcessor(string path, bool truncateFile)
         {
             FullName = path;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                _streamEncoding = Encoding.GetEncodings().FirstOrDefault(item => item.Name.Contains("8859"))?.GetEncoding() ?? Encoding.ASCII;
+            }
+            else
+            {
+                _streamEncoding = Encoding.UTF8;
+            }
 
             if (truncateFile)
             {
@@ -95,8 +107,10 @@ namespace QuadriPlus.Extensions.Logging.File.Internal
                 {
                     if (_stream == null)
                     {
-                        _stream = System.IO.File.AppendText(FullName);
-                        _stream.AutoFlush = true;
+                        _stream = new StreamWriter(FullName, true, _streamEncoding)
+                        {
+                            AutoFlush = true
+                        };
                     }
                 }
             }

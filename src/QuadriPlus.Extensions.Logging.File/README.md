@@ -15,7 +15,7 @@ ex:
     },
     "File": {
       "Path": "~/service.log",
-      "Prefix": "%date [%lvl] %name - ",
+      "Pattern": "%date [%lvl] %name - %message",
       "Behaviour": "Backup",
       "BackupMode": "Startup, Size, Age",
       "MaxSize": "1M",
@@ -28,14 +28,15 @@ ex:
  - **IncludeScopes** and **LogLevel** : see Logging configuration
  - **Path** : string, mandatory
    > If `path` starts with **~**, it is resolved relatively to application directory.
- - **Prefix** : string, optional (default: "%date [%lvl] %name - ")
+ - **Pattern** : string, optional (default: "%date [%lvl] %name - ")
    > Format: *%[alignment]{var}*, *alignment* is optional and the same as in `string.Format()`. *var* can be :  
    > *%date* : `DateTime.Now`  
    > *%Level* : Full log level string (Trace, Debug, ...)  
    > *%level* : Full log level string in lower case (trace, debug, information, ...)  
    > *%Lvl* : Short log level string (Trce, Dbug, ...)  
    > *%lvl* : Short log level string in lower case (trce, dbug, info, ...)  
-   > *%name* : The category of the logger
+   > *%name* : The category of the logger  
+   > *%message* : The message to log
  - **Behaviour** : FileLoggerBehaviour, optional (default: FileLoggerBehaviour.Append)
    > *Append* : Open log file in append mode  
    > *Override* : Open file in erase mode  

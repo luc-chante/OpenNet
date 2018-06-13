@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2018
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging.File", "src\Logging.File\Logging.File.csproj", "{D744020C-E326-4B22-8813-6638E795B680}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuadriPlus.Extensions.Logging.File", "src\QuadriPlus.Extensions.Logging.File\QuadriPlus.Extensions.Logging.File.csproj", "{D744020C-E326-4B22-8813-6638E795B680}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{754C6DBC-099F-412D-AFFA-C91394C4B5AC}"
 EndProject
@@ -37,15 +37,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BBD7FE21-6B82-4900-8BB0-5A40CB653747}
-	EndGlobalSection
-	GlobalSection(AutomaticVersions) = postSolution
-		UpdateAssemblyVersion = True
-		UpdateAssemblyFileVersion = False
-		UpdateAssemblyInfoVersion = False
-		ShouldCreateLogs = True
-		AssemblyVersionSettings = IncrementOnDemand.IncrementOnDemand.IncrementWithResetOnIncrease.Increment
-		UpdatePackageVersion = False
-		AssemblyInfoVersionType = SettingsVersion
-		InheritWinAppVersionFrom = None
 	EndGlobalSection
 EndGlobal
