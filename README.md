@@ -14,7 +14,7 @@ Download source code, and compile it with VS 2017. It will generate nuget packag
 
  - File logging: ILogger implementation to store logs into file
 
-##Licensing
+## Licensing
 
 The code in this project is licensed under CeCILL license.
 **see: [CeCILL](http://www.cecill.info/)**
