@@ -77,7 +77,7 @@ namespace QuadriPlus.Extensions.Logging.File
             _maxAge = options.MaxAge;
 
             var scopeProvider = GetScopeProvider();
-            var fileLogger = GetFileProcessor(reset: true, truncate: startup);
+            var fileLogger = GetFileProcessor(reset: true, startup: startup);
             foreach (var logger in _loggers.Values)
             {
                 logger.ScopeProvider = scopeProvider;
@@ -101,7 +101,7 @@ namespace QuadriPlus.Extensions.Logging.File
             return _includeScopes ? _scopeProvider : null;
         }
 
-        private FileLoggerProcessor GetFileProcessor(bool reset = false, bool truncate = false)
+        private FileLoggerProcessor GetFileProcessor(bool reset = false, bool startup = false)
         {
             if (reset && _fileLogger != null)
             {
@@ -112,8 +112,8 @@ namespace QuadriPlus.Extensions.Logging.File
             if (_fileLogger == null)
             {
                 _fileLogger = _behaviour != FileLoggerBehaviour.Backup ?
-                    new FileLoggerProcessor(_path, truncate)
-                    : new FileLoggerBackupProcessor(_path, _backupMode, _maxSize, _maxAge, truncate);
+                    new FileLoggerProcessor(_path, startup && _behaviour == FileLoggerBehaviour.Override)
+                    : new FileLoggerBackupProcessor(_path, _backupMode, _maxSize, _maxAge, startup);
             }
             return _fileLogger;
         }
