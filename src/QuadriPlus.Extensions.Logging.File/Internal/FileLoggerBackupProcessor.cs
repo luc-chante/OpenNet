@@ -16,12 +16,17 @@ namespace QuadriPlus.Extensions.Logging.File.Internal
 
         private readonly Func<string, bool> _backupFile;
 
-        public FileLoggerBackupProcessor(string path, FileLoggerBackupMode mode, long maxSize, TimeSpan maxAge, bool truncate)
-            : base(path, truncate)
+        public FileLoggerBackupProcessor(string path, FileLoggerBackupMode mode, long maxSize, TimeSpan maxAge, bool startup)
+            : base(path, false)
         {
             var testSize = (mode & FileLoggerBackupMode.Size) == FileLoggerBackupMode.Size;
             var testAge = (mode & FileLoggerBackupMode.Age) == FileLoggerBackupMode.Age;
             _backupFile = BackupFileFactory(testSize ? maxSize : long.MaxValue, testAge ? maxAge : Timeout.InfiniteTimeSpan);
+
+            if (startup && (mode & FileLoggerBackupMode.Startup) == FileLoggerBackupMode.Startup)
+            {
+                GenerateBackupFile();
+            }
         }
 
         protected override void WriteMessage(string message)
